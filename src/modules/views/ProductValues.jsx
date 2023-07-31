@@ -39,11 +39,7 @@ function ProductValues() {
               </Typography>
               <Typography variant="h5">
                 {
-                  'From the latest trendy boutique hotel to the iconic palace with XXL pool'
-                }
-
-                {
-                  ', go for a mini-vacation just a few subway stops away from your home.'
+                  '사용자들의 후기가 준비되어 있습니다. 즐거운 곳에서의 특별한 휴식 당신도 느껴 보세요. Let me go~'
                 }
               </Typography>
             </Box>
@@ -61,10 +57,8 @@ function ProductValues() {
               </Typography>
               <Typography variant="h5">
                 {
-                  'Privatize a pool, take a Japanese bath or wake up in 900m2 of garden… '
-                }
-
-                {'your Sundays will not be alike.'}
+                  '다양한 분야의 여행 전문가들이 여러분의 여행계획을 꼼꼼히 설계해 드립니다. 10분만 투자하세요.'
+                } 
               </Typography>
             </Box>
           </Grid>
@@ -80,8 +74,7 @@ function ProductValues() {
                 Exclusive rates
               </Typography>
               <Typography variant="h5">
-                {'By registering, you will access specially negotiated rates '}
-                {'that you will not find anywhere else.'}
+                {'견적서비스는 여러분의 경비를 줄일 수 있습니다. 별점과 후기로 서비스 높은 여행사의 견적을 골라 보세요.'}
               </Typography>
             </Box>
           </Grid>
