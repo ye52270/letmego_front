@@ -22,7 +22,7 @@ export default function ProductHero() {
         alt="increase priority"
       />
       <Typography color="inherit" align="center" variant="h2" marked="center">
-        Upgrade your Sundays
+        나만의 여행계획을 세워 보세요
       </Typography>
       <Typography
         color="inherit"
@@ -30,7 +30,7 @@ export default function ProductHero() {
         variant="h5"
         sx={{ mb: 4, mt: { xs: 4, sm: 10 } }}
       >
-        Enjoy secret offers up to -70% off the best luxury hotels every Sunday.
+        흔한 패키지는 NO! 여행 전문가들이 당신에게 맞춤 제안을 해드립니다
       </Typography>
       <Button
         color="secondary"
@@ -43,7 +43,7 @@ export default function ProductHero() {
         Register
       </Button>
       <Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
-        Discover the experience
+        지금 바로 등록하세요
       </Typography>
     </ProductHeroLayout>
   );
