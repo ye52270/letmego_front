@@ -12,6 +12,7 @@ import RFTextField from './modules/form/RFTextField';
 import FormButton from './modules/form/FormButton';
 import FormFeedback from './modules/form/FormFeedback';
 import withRoot from './modules/withRoot';
+import call from './config/ApiService';
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
@@ -29,7 +30,9 @@ function SignUp() {
     return errors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
+    alert(values.firstName + values.lastName + values.email + values.password);
+    call("/member", "POST", values.email);
     setSent(true);
   };
 

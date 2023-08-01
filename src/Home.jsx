@@ -10,6 +10,26 @@ import AppAppBar from './modules/views/AppAppBar';
 import withRoot from './modules/withRoot';
 
 function Index() {
+
+
+// Backend 연결
+
+const requiredOptions = {
+  method: "GET",
+  Headers: { "Content-Type" : "application/json"},
+};
+
+fetch("http://localhost:8080/member", requiredOptions)
+  .then((response) => response.json())
+  .then(
+    (response) => {
+      console.log(response.data);
+    },
+    (error) => {
+      console.log("Error : " + error);
+    }
+  );
+
   return (
     <React.Fragment>
       <AppAppBar />
