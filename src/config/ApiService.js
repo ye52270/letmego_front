@@ -13,8 +13,8 @@ export default async function call(api, method, request) {
 
 
     if(request) {
-        console.log("request : ", request);
         options.body = JSON.stringify(request);
+        console.log("body : ",JSON.stringify(request));
     }
 
     return await fetch(options.url, options)
