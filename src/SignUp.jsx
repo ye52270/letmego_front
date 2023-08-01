@@ -31,8 +31,7 @@ function SignUp() {
   };
 
   const handleSubmit = (values) => {
-    alert(values.firstName + values.lastName + values.email + values.password);
-    call("/member", "POST", values.email);
+    call("/member", "POST", values);
     setSent(true);
   };
 
