@@ -67,7 +67,7 @@ function ProductHowItWorks() {
                   sx={image}
                 />
                 <Typography variant="h5" align="center">
-                  Appointment every Wednesday 9am.
+                  여행 계획을 작성합니다
                 </Typography>
               </Box>
             </Grid>
@@ -81,8 +81,7 @@ function ProductHowItWorks() {
                   sx={image}
                 />
                 <Typography variant="h5" align="center">
-                  First come, first served. Our offers are in limited quantities, so
-                  be quick.
+                  여행견적을 비교 합니다
                 </Typography>
               </Box>
             </Grid>
@@ -96,8 +95,7 @@ function ProductHowItWorks() {
                   sx={image}
                 />
                 <Typography variant="h5" align="center">
-                  {'New offers every week. New experiences, new surprises. '}
-                  {'Your Sundays will no longer be alike.'}
+                  {'맘에 드는 견적을 고르면 끝!'} 
                 </Typography>
               </Box>
             </Grid>
