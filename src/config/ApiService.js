@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./api-config";
 
-async function call(api, method, request) {
+export async function call(api, method, request) {
  
     let options = {
         headers: new Headers({
