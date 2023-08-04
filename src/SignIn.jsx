@@ -11,6 +11,7 @@ import RFTextField from './modules/form/RFTextField';
 import FormButton from './modules/form/FormButton';
 import FormFeedback from './modules/form/FormFeedback';
 import withRoot from './modules/withRoot';
+import { signin } from './config/ApiService';
 
 function SignIn() {
   const [sent, setSent] = React.useState(false);
@@ -28,7 +29,19 @@ function SignIn() {
     return errors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
+    
+    const email = values.email;
+    const password = values.password;
+
+    signin({email, password})
+    .then(
+    (response) => {
+      console.log("sign-in end : " + response);
+    }
+    ).catch(
+      (error) => console.log(error)
+    );
     setSent(true);
   };
 
