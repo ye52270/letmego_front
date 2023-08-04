@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./api-config";
 
-export default async function call(api, method, request) {
+async function call(api, method, request) {
  
     let options = {
         headers: new Headers({
@@ -22,6 +22,11 @@ export default async function call(api, method, request) {
         (response) => {
             if(response.status === 200) {
                 return response.json();
+            }else if(response.status === 403) {
+                window.location.href = "/sign-in"
+            }else{
+                Promise.reject(response);
+                throw Error(response);
             }
         }
     ).catch(
@@ -30,4 +35,13 @@ export default async function call(api, method, request) {
             console.error(error);
         }
     );
+}
+
+export async function signup(userDTO){
+    return await call("/auth/signup", "POST", userDTO);
+}
+
+export async function signin(userDTO){
+ 
+    return await call("/auth/signin", "POST", userDTO);
 }

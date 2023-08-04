@@ -11,8 +11,8 @@ import { email, required } from './modules/form/validation';
 import RFTextField from './modules/form/RFTextField';
 import FormButton from './modules/form/FormButton';
 import FormFeedback from './modules/form/FormFeedback';
-import withRoot from './modules/withRoot';
-import call from './config/ApiService';
+import withRoot from './modules/withRoot'; 
+import { signup } from './config/ApiService';
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
@@ -31,7 +31,14 @@ function SignUp() {
   };
 
   const handleSubmit = (values) => {
-    call("/member", "POST", values);
+    signup(values)
+    .then(
+      (response) => {
+        console.log("sign-up end : " + response);
+        // window.location.href = "/sign-in";
+      }
+    )
+ 
     setSent(true);
   };
 
