@@ -1,4 +1,5 @@
 import * as React from 'react';
+ 
 import { useEffect } from 'react';
 import AppAppBar from './views/AppAppBar';
 import AppForm from './views/AppForm';
@@ -10,17 +11,45 @@ import { Box } from '@mui/system';
 import FormButton from './form/FormButton';
 import RFTextField from './form/RFTextField';
 import FormFeedback from './form/FormFeedback';
-import { required } from './form/validation';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
  
 function Order() {
+    const accessToken = localStorage.getItem("ACCESS_TOKEN");
+    
+    const location = [
+        { label: '동남아시아', location: 'eastasia' },
+        { label: '일본', location: 'japan' },
+        { label: '유럽', location: 'europe' },
+        { label: '미국', location: 'usa' },
+    ]
+
+    useEffect(
+        () => {
+            console.log("order component : " + accessToken);
+            if(accessToken === "null") {
+                window.location.href = "/sign-in";
+            }
+        }, []
+    )
+    
+
 
     const handleSubmit = (values) => {
-        console.log(values);
+        const content = values.content;
+        call("/order/test", "GET", content)
+        .then(
+            (response) => {
+                console.log("order start : " + response);
+            }
+        )
+        .catch(
+            (error) => console.log(error)
+        );
     };
     
- 
-
-    
+   
     return (
         <React.Fragment>
             <AppAppBar />
@@ -37,27 +66,13 @@ function Order() {
                 >
                    {({ handleSubmit: handleSubmit2, submitting }) => (
                         <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
-                            <Field
-                                autoComplete=""
-                                autoFocus
-                                component={RFTextField}
- 
-                                fullWidth
-                                label="content"
-                                margin="normal"
-                                name="content"
-                                required
-                                size="large"
+                             <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                options={location}
+                                sx={{ width: 300 }}
+                                renderInput={(params) => <TextField {...params} label="어디로가시나요?" />}
                             />
-                            <FormSpy subscription={{ submitError: true }}>
-                                {({ submitError }) =>
-                                submitError ? (
-                                    <FormFeedback error sx={{ mt: 2 }}>
-                                    {submitError}
-                                    </FormFeedback>
-                                ) : null
-                                }
-                            </FormSpy>
                             <FormButton
                                 sx={{ mt: 3, mb: 2 }}
  

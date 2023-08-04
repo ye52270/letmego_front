@@ -35,7 +35,7 @@ function SignUp() {
     .then(
       (response) => {
         console.log("sign-up end : " + response);
-        // window.location.href = "/sign-in";
+        window.location.href = "/sign-in";
       }
     )
  

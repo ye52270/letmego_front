@@ -11,6 +11,8 @@ const rightLink = {
 };
 
 function AppAppBar() {
+  const accessToken = localStorage.getItem("ACCESS_TOKEN");
+  console.log("appbar access token : " + accessToken);
   return (
     <div>
       <AppBar position="fixed">
@@ -30,10 +32,10 @@ function AppAppBar() {
               color="inherit"
               variant="h6"
               underline="none"
-              href="/sign-in/"
+              href={ accessToken === "null" ? "/sign-in/" : "/sign-out"} 
               sx={rightLink}
             >
-              {'Sign In'}
+              { accessToken === "null" ? 'Sign In' : 'Sign OUT'}
             </Link>
             <Link
               variant="h6"
