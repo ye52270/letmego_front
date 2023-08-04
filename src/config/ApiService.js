@@ -22,7 +22,8 @@ async function call(api, method, request) {
         (response) => {
             if(response.status === 200) {
                 return response.json();
-            }else if(response.status === 403) {
+            }else if(response.status === 400) {
+                alert("login 실패");
                 window.location.href = "/sign-in"
             }else{
                 Promise.reject(response);
@@ -43,5 +44,11 @@ export async function signup(userDTO){
 
 export async function signin(userDTO){
  
-    return await call("/auth/signin", "POST", userDTO);
+    return await call("/auth/signin", "POST", userDTO)
+                    .then((response) => {
+                        if(response.token) {
+                            window.location.href = "/";
+                        }
+
+                    })
 }
