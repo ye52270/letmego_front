@@ -3,20 +3,24 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import AppBar from '../components/AppBar';
 import Toolbar from '../components/Toolbar';
+import { useEffect } from 'react';
 
 const rightLink = {
   fontSize: 16,
   color: 'common.white',
   ml: 3,
 };
-
+ 
 function AppAppBar() {
   const accessToken = localStorage.getItem("ACCESS_TOKEN");
-  console.log("appbar access token : " + accessToken);
+  const USER_NAME = localStorage.getItem("USER_NAME");
+  // console.log("appbar access token : " + accessToken);
+  // console.log("USER_NAME : " + USER_NAME);
   return (
     <div>
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: 'space-between' }}>
+          {USER_NAME !== "null" ? `${USER_NAME} 님 어서오세요` : "" }
           <Box sx={{ flex: 1 }} />
           <Link
             variant="h6"
@@ -43,7 +47,7 @@ function AppAppBar() {
               href="/sign-up/"
               sx={{ ...rightLink, color: 'secondary.main' }}
             >
-              {'Sign Up'}
+              { accessToken === "null" ? 'Sign Up' : ''}
             </Link>
           </Box>
         </Toolbar>

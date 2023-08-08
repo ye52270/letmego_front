@@ -7,40 +7,20 @@ import ProductValues from './modules/views/ProductValues';
 import ProductHowItWorks from './modules/views/ProductHowItWorks';
 import ProductCTA from './modules/views/ProductCTA';
 import AppAppBar from './modules/views/AppAppBar';
-import withRoot from './modules/withRoot';
+import withRoot from './modules/withRoot';  
 
 function Index() {
-
-
-// Backend 연결
-
-const requiredOptions = {
-  method: "GET",
-  Headers: { "Content-Type" : "application/json"},
-};
-
-fetch("http://localhost:8080/member", requiredOptions)
-  .then((response) => response.json())
-  .then(
-    (response) => {
-      console.log(response.data);
-    },
-    (error) => {
-      console.log("Error : " + error);
-    }
-  );
-
+ 
   return (
-    <React.Fragment>
-      <AppAppBar />
-      <ProductHero />
-      <ProductValues />
-      <ProductCategories />
-      <ProductHowItWorks />
-      <ProductCTA />
-      <ProductSmokingHero />
-      <AppFooter />
-    </React.Fragment>
+      <React.Fragment> 
+        <AppAppBar />
+        <ProductHero />
+        <ProductValues />
+        <ProductCategories />
+        <ProductHowItWorks />
+        <ProductCTA />
+        <ProductSmokingHero />
+    </React.Fragment> 
   );
 }
 

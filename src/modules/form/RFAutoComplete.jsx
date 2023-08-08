@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import TextField from '../components/TextField';
 
 function RFTextField(props) {
-   const {
-    multiline,
-    helperText,
+  console.log("props : " + props);
+
+  const {
     autoComplete,
     input,
     InputProps,
@@ -17,7 +17,6 @@ function RFTextField(props) {
   return (
     <TextField
       error={Boolean(!!touched && (error || submitError))}
-      multiline
       {...input}
       {...other}
       InputProps={{
@@ -26,13 +25,9 @@ function RFTextField(props) {
         },
         ...InputProps,
       }}
-      
-      // helperText={touched ? error || submitError : ''}
-      helperText={helperText}
+      helperText={touched ? error || submitError : ''}
       variant="standard"
-      
-    >
-    </TextField>
+    />
   );
 }
 

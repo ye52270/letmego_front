@@ -18,6 +18,7 @@ export async function call(api, method, request) {
         method: method
     }; 
 
+ 
     if(request) {
         options.body = JSON.stringify(request);
     } 
@@ -25,6 +26,7 @@ export async function call(api, method, request) {
     .then(
         (response) => {
             if(response.status === 200) {
+                console.log("status 200 ok");
                 return response.json();
             }else if(response.status === 400) {
                 alert("login 실패");
@@ -47,8 +49,22 @@ export async function signup(userDTO){
 }
 
 export function signout(){
-    localStorage.setItem("ACCESS_TOKEN", null)
+    localStorage.setItem("ACCESS_TOKEN", null);
+    localStorage.setItem("USER_NAME", null);
     window.location.href = "/";
+}
+
+export async function orderList() {
+    const email = localStorage.getItem("USER_ID");
+    const data =  await call("/order?email=" + email, "GET");
+    return data;
+}
+
+export async function order(orderDTO){
+ 
+    return await call("/order/", "POST", orderDTO);
+ 
+
 }
 
 export async function signin(userDTO){
@@ -57,6 +73,9 @@ export async function signin(userDTO){
                     .then((response) => {
                         if(response.token) {
                             localStorage.setItem("ACCESS_TOKEN", response.token);
+                            localStorage.setItem("USER_NAME", response.firstName + response.lastName);
+                            localStorage.setItem("USER_ID", response.email);
+                            console.log(localStorage);
                             window.location.href = "/";
                         }
 

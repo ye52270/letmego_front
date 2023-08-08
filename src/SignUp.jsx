@@ -130,7 +130,6 @@ function SignUp() {
           )}
         </Form>
       </AppForm>
-      <AppFooter />
     </React.Fragment>
   );
 }
