@@ -1,24 +1,34 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import { Field, Form, FormSpy } from 'react-final-form';
-import Typography from './modules/components/Typography';
-import AppFooter from './modules/views/AppFooter';
 import AppAppBar from './modules/views/AppAppBar';
 import AppForm from './modules/views/AppForm';
-import { email, required } from './modules/form/validation';
-import RFTextField from './modules/form/RFTextField';
-import FormButton from './modules/form/FormButton';
-import FormFeedback from './modules/form/FormFeedback';
+import Typography from './modules/components/Typography';
 import withRoot from './modules/withRoot'; 
+import { Field, Form, FormSpy } from 'react-final-form';
+import { Box } from '@mui/system';
+import FormButton from './modules/form/FormButton';
+import RFTextField from './modules/form/RFTextField';
+
+import { email, required } from './modules/form/validation';
+import MenuItem from '@mui/material/MenuItem';
+
+
+import Link from '@mui/material/Link';
+import FormFeedback from './modules/form/FormFeedback';
 import { signup } from './config/ApiService';
+ 
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
 
+  const userRole = [
+    { label: '선택', value: '-' },
+    { label: '개인회원', value: '1' },
+    { label: '기업회원', value: '2' }, 
+] 
+
   const validate = (values) => {
-    const errors = required(['firstName', 'lastName', 'email', 'password'], values);
+    const errors = required(['userRole', 'firstName', 'lastName', 'email', 'password' ], values);
 
     if (!errors.email) {
       const emailError = email(values.email);
@@ -63,10 +73,33 @@ function SignUp() {
         >
           {({ handleSubmit: handleSubmit2, submitting }) => (
             <Box component="form" onSubmit={handleSubmit2} noValidate sx={{ mt: 6 }}>
-              <Grid container spacing={2}>
+                <Grid container spacing={2}>    
+                    <Grid item xs={12} sm={12}>
+                        <Field     
+                            autoFocus                 
+                            component={RFTextField}
+                            autoComplete="userRole"
+                            fullWidth
+                            label="회원구분"
+                            name="userRole"
+                            required
+                            select
+                            defaultValue = {"-"}
+                        > 
+                            {
+                                userRole.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                    )
+                                )
+                            }   
+                         
+                        </Field>    
+                    </Grid>
+ 
                 <Grid item xs={12} sm={6}>
                   <Field
-                    autoFocus
                     component={RFTextField}
                     disabled={submitting || sent}
                     autoComplete="given-name"

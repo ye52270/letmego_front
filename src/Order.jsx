@@ -1,20 +1,21 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import AppAppBar from './views/AppAppBar';
-import AppForm from './views/AppForm';
-import Typography from './components/Typography';
-import withRoot from './withRoot';
-import { order } from '../config/ApiService';
+import AppAppBar from './modules/views/AppAppBar';
+import AppForm from './modules/views/AppForm';
+import Typography from './modules/components/Typography';
+import withRoot from './modules/withRoot';
+import { order } from './config/ApiService';
 import { Field, Form } from 'react-final-form';
 import { Box } from '@mui/system';
-import FormButton from './form/FormButton';
-import RFTextField from './form/RFTextField';
+import FormButton from './modules/form/FormButton';
+import RFTextField from './modules/form/RFTextField';
  
-import { required } from './form/validation';
+import { required } from './modules/form/validation';
 import MenuItem from '@mui/material/MenuItem';
 import { useParams } from 'react-router-dom';
-import { orderDetail } from '../config/ApiService';
-import { useQuery, useQueries } from 'react-query';
+import { orderDetail } from './config/ApiService';
+import { useQuery } from 'react-query';
+import dayjs from 'dayjs';
 
 const ORDER_NAME = localStorage.getItem("USER_NAME");
 const ORDER_EMAIL = localStorage.getItem("USER_ID");
@@ -35,11 +36,7 @@ const person = [
     { label: '4명', value: '4' },
 ]
 
-const date = new Date();
-const year = date.getFullYear();
-const month = ('0' + (date.getMonth() + 1)).slice(-2);
-const day = ('0' + date.getDate()).slice(-2);
-const dateStr = `${year}/${month}/${day}`;
+
 
  
  
@@ -47,31 +44,27 @@ function Order() {
     const [sent, setSent] = React.useState(false);
     const params = useParams();
     const orderId = params.orderId;
+  
     
-    const order = useQueries([
+    const {status, data:orders, error} =  useQuery(
             {
                 queryKey: ["orderDetail", orderId],
                 queryFn: () => orderDetail(orderId)
             }
-        ]
+        
     )
-
-    console.log(order[0].data);
-    
     if (status === "loading") {
         return <span>Loading...</span>;
     }
     
     if (status === "error") {
         return <span>Error: {error.message}</span>;
-    }
-
+    }  
+ 
     const handleSubmit = (values) => {
         order(values)
         .then(
-          (response) => {
-            window.location.href = "/order-list";
-          }
+          () => {window.location.href = "/order-list";}
         )
      
         setSent(true); 
@@ -81,10 +74,9 @@ function Order() {
         const errors = required(['orderLocation', 'orderAdult', 'orderChild', 
                                 'startedAt','endedAt', 'orderContent' ], values);     
         return errors;
-      };
+    }; 
 
-
-
+    console.log(orders);
     return (
         <>
         <AppAppBar />
@@ -125,7 +117,7 @@ function Order() {
                     <Grid item xs={12} sm={6}>       
                         <Field 
                             component={RFTextField}
-                            disabled={submitting || sent}
+                            disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                             autoComplete="location"
                             fullWidth
                             label="location"
@@ -133,7 +125,7 @@ function Order() {
                             required
                             select
                             // helperText="여행지역선택"
-                            defaultValue={'-'}
+                            defaultValue = {orders?.orderLocation ? orders?.orderLocation: "-"}
                         >
                             {
                                 location.map((option) => (
@@ -149,7 +141,7 @@ function Order() {
                         <Field 
                      
                             component={RFTextField}
-                            disabled={submitting || sent}
+                            disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                             autoComplete="adult"
                             fullWidth
                             label="성인"
@@ -157,7 +149,7 @@ function Order() {
                             required
                             select
                             // helperText="여행지역선택"
-                            defaultValue={"-"}
+                            defaultValue = {orders?.orderAdult ? orders?.orderAdult: "-"}
                         >
                             {
                                 person.map((option) => (
@@ -173,7 +165,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={submitting || sent}
+                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                                 autoComplete="child"
                                 fullWidth
                                 label="어린이"
@@ -181,7 +173,8 @@ function Order() {
                                 required
                                 select
                                 // helperText="여행지역선택"
-                                defaultValue={"-"}
+                                // defaultValue={"-"}
+                                defaultValue = {orders?.orderChild ? orders?.orderChild: "-"}
                             >
                                 {
                                     person.map((option) => (
@@ -197,14 +190,14 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={submitting || sent}
+                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                                 autoComplete="startedAt"
                                 fullWidth
                                 label="출발일(YYYY/MM/DD)"
                                 name="startedAt"
                                 required
                                 // helperText="여행지역선택"
-                                defaultValue={dateStr}
+                                defaultValue = {orders?.startedAt ? orders?.startedAt: dayjs(new Date()).format('YYYY-MM-DD')}
                         >
                         </Field>    
                     </Grid>    
@@ -212,14 +205,14 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={submitting || sent}
+                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                                 autoComplete="endedAt"
                                 fullWidth
                                 label="도착일(YYYY/MM/DD)"
                                 name="endedAt"
                                 required
                                 // helperText="여행지역선택"
-                                defaultValue={dateStr}
+                                defaultValue = {orders?.endedAt ? orders?.endedAt: dayjs(new Date()).format('YYYY-MM-DD')}
                         >
                         </Field>    
                     </Grid>       
@@ -227,7 +220,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={submitting || sent}
+                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
                                 autoComplete="orderContent"
                                 fullWidth
                                 multiline
@@ -236,6 +229,7 @@ function Order() {
                                 name="orderContent"
                                 required
                                 helperText="내용을 입력하세요" 
+                                defaultValue = {orders?.content ? orders?.content: "-"}
                         >
                         </Field>    
                     </Grid>                              
@@ -253,12 +247,12 @@ function Order() {
                 </LocalizationProvider>  */}
                 <FormButton
                     sx={{ mt: 3, mb: 2 }}
-
                     size="large"
                     color="secondary"
                     fullWidth
+                    disabled={orders?.orderStatus === "pending" || orders === null ? false : true}                    
                 >
-                    { '등록하기'}
+                    {"등록하기"}
                 </FormButton>
             </Box>
             )}

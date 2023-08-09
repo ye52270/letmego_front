@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom/client'
 import Home from './Home'
 import Signin from './SignIn'
 import SignUp from './SignUp'
-import Order from './modules/Order'
+import Order from './Order'
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import SignOut from './SignOut'
-import OrderList from './modules/OrderList'
+import OrderList from './OrderList'
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+
 
 const router = createBrowserRouter([
   {

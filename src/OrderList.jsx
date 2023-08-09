@@ -2,13 +2,14 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
-import AppAppBar from './views/AppAppBar';
-import AppForm from './views/AppForm';
+import AppAppBar from './modules/views/AppAppBar';
+import AppForm from './modules/views/AppForm';
 import withRoot from './withRoot';
-import Scrollbar from './components/SCrollBar';
-import SeverityPill from './components/SeverityPill';
  
-import { orderList } from '../config/ApiService';
+import Scrollbar from './modules/components/ScrollBar';
+import SeverityPill from './modules/components/SeverityPill';
+ 
+import { orderList } from './config/ApiService';
 import { useQuery } from 'react-query';
 import dayjs from 'dayjs';
 import {Link} from '@mui/material';
