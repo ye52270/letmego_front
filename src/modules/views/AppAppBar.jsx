@@ -4,6 +4,8 @@ import Link from '@mui/material/Link';
 import AppBar from '../components/AppBar';
 import Toolbar from '../components/Toolbar';
 import { useEffect } from 'react';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import SvgIcon from "@mui/material/SvgIcon";
 
 const rightLink = {
   fontSize: 16,
@@ -20,7 +22,13 @@ function AppAppBar() {
     <div>
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          {USER_NAME !== "null" ? `${USER_NAME} 님 어서오세요` : "" }
+          <Link
+           variant="h6"
+           underline="none"
+           color="inherit"
+           href="/order-list">
+            {USER_NAME !== "null" ? `${USER_NAME} 님 어서오세요` : "" }
+          </Link>
           <Box sx={{ flex: 1 }} />
           <Link
             variant="h6"
@@ -32,6 +40,7 @@ function AppAppBar() {
             {'당신과 함께하는 letmego.app'}
           </Link>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        
             <Link
               color="inherit"
               variant="h6"

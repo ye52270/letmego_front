@@ -61,10 +61,13 @@ export async function orderList() {
 }
 
 export async function order(orderDTO){
- 
     return await call("/order/", "POST", orderDTO);
- 
+}
 
+export async function orderDetail(orderId){
+    console.log(orderId);
+    return await call("/order/"+orderId);
+    
 }
 
 export async function signin(userDTO){

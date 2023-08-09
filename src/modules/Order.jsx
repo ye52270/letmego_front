@@ -1,26 +1,20 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import { useEffect } from 'react';
 import AppAppBar from './views/AppAppBar';
 import AppForm from './views/AppForm';
 import Typography from './components/Typography';
 import withRoot from './withRoot';
-import { call, order, orderList } from '../config/ApiService';
-import { Field, Form, FormSpy } from 'react-final-form';
+import { order } from '../config/ApiService';
+import { Field, Form } from 'react-final-form';
 import { Box } from '@mui/system';
 import FormButton from './form/FormButton';
 import RFTextField from './form/RFTextField';
-import FormFeedback from './form/FormFeedback';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+ 
 import { required } from './form/validation';
 import MenuItem from '@mui/material/MenuItem';
- 
+import { useParams } from 'react-router-dom';
+import { orderDetail } from '../config/ApiService';
+import { useQuery, useQueries } from 'react-query';
 
 const ORDER_NAME = localStorage.getItem("USER_NAME");
 const ORDER_EMAIL = localStorage.getItem("USER_ID");
@@ -47,18 +41,35 @@ const month = ('0' + (date.getMonth() + 1)).slice(-2);
 const day = ('0' + date.getDate()).slice(-2);
 const dateStr = `${year}/${month}/${day}`;
 
-
+ 
  
 function Order() { 
     const [sent, setSent] = React.useState(false);
+    const params = useParams();
+    const orderId = params.orderId;
+    
+    const order = useQueries([
+            {
+                queryKey: ["orderDetail", orderId],
+                queryFn: () => orderDetail(orderId)
+            }
+        ]
+    )
 
- 
+    console.log(order[0].data);
+    
+    if (status === "loading") {
+        return <span>Loading...</span>;
+    }
+    
+    if (status === "error") {
+        return <span>Error: {error.message}</span>;
+    }
 
     const handleSubmit = (values) => {
         order(values)
         .then(
           (response) => {
-            console.log("order end : " + response);
             window.location.href = "/order-list";
           }
         )

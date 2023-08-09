@@ -33,8 +33,12 @@ const router = createBrowserRouter([
     element: <SignOut />,
   },  
   {
-    path: "/order",
-    element: <Order />,
+    path: "/order/:orderId",
+    element: <Order />, 
+  },
+  {
+    path: "/order/",
+    element: <Order />, 
   },
   {
     path: "/order-list",

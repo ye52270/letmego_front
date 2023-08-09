@@ -7,9 +7,11 @@ import AppForm from './views/AppForm';
 import withRoot from './withRoot';
 import Scrollbar from './components/SCrollBar';
 import SeverityPill from './components/SeverityPill';
-import { useEffect } from 'react';
+ 
 import { orderList } from '../config/ApiService';
 import { useQuery } from 'react-query';
+import dayjs from 'dayjs';
+import {Link} from '@mui/material';
 
 import {
     Box,
@@ -56,17 +58,17 @@ function OrderList(props) {
             <Box sx={{ minWidth: 800 }}>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>
+                  <TableRow >
+                    <TableCell align='center'>
                       작성일
                     </TableCell>
-                    <TableCell>
+                    <TableCell align='center'>
                       장소
                     </TableCell>
-                    <TableCell sortDirection="desc">
+                    <TableCell sortDirection="desc" align='center'>
                       여행기간
                     </TableCell>
-                    <TableCell>
+                    <TableCell align='center'>
                       진행상태
                     </TableCell>
                   </TableRow>
@@ -76,20 +78,25 @@ function OrderList(props) {
                     return (
                       <TableRow
                         hover
-                        key={order.orderId}
+                        key={order.orderId} 
                       >
-                        <TableCell>
-                            {order.startedAt}
+                        <TableCell align='center'>
+                            {dayjs(order.createDate).format('YYYY-MM-DD')}
                         </TableCell>
-                        <TableCell>
-                            {order.orderLocation}
+                        <TableCell align='center'>
+                           {order.orderLocation} 
                         </TableCell>
-                        <TableCell>
-                            {order.startedAt} ~ {order.endedAt}
+                        <TableCell align='center'>
+                            <Link
+                            underline="none"
+                            href={"/order/" + order.orderId}
+                            >
+                                {order.startedAt} ~ {order.endedAt}
+                            </Link>                           
                         </TableCell>
-                        <TableCell>
-                          <SeverityPill color={statusMap[order.status]}>
-                            {order.status}
+                        <TableCell align='center'>
+                          <SeverityPill color={statusMap[order.orderStatus]}>
+                            {order.orderStatus}
                           </SeverityPill>
                         </TableCell>
                       </TableRow>
@@ -117,12 +124,8 @@ function OrderList(props) {
         </Card>
         </>
       );
-    };
-    
-    OrderList.prototype = {
-      orders: PropTypes.array,
-      sx: PropTypes.object
-    };
+    }
+ 
  
     export default withRoot(OrderList);
 
