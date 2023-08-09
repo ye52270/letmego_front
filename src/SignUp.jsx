@@ -23,8 +23,8 @@ function SignUp() {
 
   const userRole = [
     { label: '선택', value: '-' },
-    { label: '개인회원', value: '1' },
-    { label: '기업회원', value: '2' }, 
+    { label: '개인회원', value: 'customer' },
+    { label: '기업회원', value: 'seller' }, 
 ] 
 
   const validate = (values) => {

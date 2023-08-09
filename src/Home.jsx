@@ -8,18 +8,28 @@ import ProductHowItWorks from './modules/views/ProductHowItWorks';
 import ProductCTA from './modules/views/ProductCTA';
 import AppAppBar from './modules/views/AppAppBar';
 import withRoot from './modules/withRoot';  
+import OrderListAll from './OrderListAll';
 
 function Index() {
+
+  const userRole = localStorage.getItem("USER_ROLE");
  
   return (
       <React.Fragment> 
         <AppAppBar />
-        <ProductHero />
-        <ProductValues />
-        <ProductCategories />
-        <ProductHowItWorks />
-        <ProductCTA />
-        <ProductSmokingHero />
+        {
+          userRole === "seller" ?
+          <OrderListAll />
+          :
+          <>
+            <ProductHero />
+            <ProductValues />
+            <ProductCategories />
+            <ProductHowItWorks />
+            <ProductCTA />
+            <ProductSmokingHero />
+          </>
+        }
     </React.Fragment> 
   );
 }

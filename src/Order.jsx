@@ -35,17 +35,15 @@ const person = [
     { label: '3명', value: '3' },
     { label: '4명', value: '4' },
 ]
-
-
-
- 
  
 function Order() { 
     const [sent, setSent] = React.useState(false);
     const params = useParams();
     const orderId = params.orderId;
-  
-    
+
+    const usreRole = localStorage.getItem("USER_ROLE");
+    console.log(usreRole);
+ 
     const {status, data:orders, error} =  useQuery(
             {
                 queryKey: ["orderDetail", orderId],

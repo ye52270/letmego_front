@@ -45,12 +45,14 @@ export async function call(api, method, request) {
 }
 
 export async function signup(userDTO){
+    console.log(userDTO);
     return await call("/auth/signup", "POST", userDTO);
 }
 
 export function signout(){
     localStorage.setItem("ACCESS_TOKEN", null);
     localStorage.setItem("USER_NAME", null);
+    localStorage.setItem("USER_ROLE", null);
     window.location.href = "/";
 }
 
@@ -72,11 +74,12 @@ export async function orderDetail(orderId = ""){
 }
 
 export async function signin(userDTO){
-
+ 
     return await call("/auth/signin", "POST", userDTO)
                     .then((response) => {
                         if(response.token) {
                             localStorage.setItem("ACCESS_TOKEN", response.token);
+                            localStorage.setItem("USER_ROLE", response.userRole);
                             localStorage.setItem("USER_NAME", response.firstName + response.lastName);
                             localStorage.setItem("USER_ID", response.email);
                             console.log(localStorage);

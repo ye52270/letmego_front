@@ -27,7 +27,7 @@ function AppAppBar() {
            underline="none"
            color="inherit"
            href="/order-list">
-            {USER_NAME !== "null" ? `${USER_NAME} 님 어서오세요` : "" }
+            {USER_NAME !== "null" ? `${USER_NAME}[Seller] 님 어서오세요` : "" }
           </Link>
           <Box sx={{ flex: 1 }} />
           <Link
