@@ -4,7 +4,7 @@ import AppAppBar from './modules/views/AppAppBar';
 import AppForm from './modules/views/AppForm';
 import Typography from './modules/components/Typography';
 import withRoot from './modules/withRoot';
-import { order } from './config/ApiService';
+import { order, proposal, proposalDetail } from './config/ApiService';
 import { Field, Form } from 'react-final-form';
 import { Box } from '@mui/system';
 import FormButton from './modules/form/FormButton';
@@ -16,6 +16,7 @@ import { useParams } from 'react-router-dom';
 import { orderDetail } from './config/ApiService';
 import { useQuery } from 'react-query';
 import dayjs from 'dayjs';
+
 
 const ORDER_NAME = localStorage.getItem("USER_NAME");
 const ORDER_EMAIL = localStorage.getItem("USER_ID");
@@ -40,48 +41,75 @@ function Order() {
     const [sent, setSent] = React.useState(false);
     const params = useParams();
     const orderId = params.orderId;
+    const userRole = localStorage.getItem("USER_ROLE");
 
-    const usreRole = localStorage.getItem("USER_ROLE");
-    console.log(usreRole);
  
-    const {status, data:orders, error} =  useQuery(
+
+    const {status:orderStatus, data:orders, error:orderError} =  useQuery(
             {
                 queryKey: ["orderDetail", orderId],
                 queryFn: () => orderDetail(orderId)
             }
         
-    )
-    if (status === "loading") {
+    );
+ 
+
+    const {status:proposalStatus, data:proposal, error:proposalError} =  useQuery(
+        {
+            queryKey: ["proposal", orderId],
+            queryFn: () => proposalDetail(orderId)
+        }
+    
+);
+
+
+    if (orderStatus ===  "loading" || proposalStatus ===  "loading") {
         return <span>Loading...</span>;
     }
     
-    if (status === "error") {
-        return <span>Error: {error.message}</span>;
-    }  
- 
+    if (orderError === "error" || proposalError === "error" ){
+        return <span>Error...</span>;
+    }   
+
     const handleSubmit = (values) => {
-        order(values)
-        .then(
-          () => {window.location.href = "/order-list";}
-        )
-     
+        if(userRole === "customer") { 
+            order(values)
+            .then(
+              (res) => {
+                console.log("customer submit : " + res);
+                window.location.href = "/order-list";
+            }
+            )
+            .catch((error) => {console.error(error);})
+         
+        }else if(userRole === "seller") { 
+
+            proposal(values)
+            .then((res) => {
+                window.location.href = "/";
+                console.log("seller submit : " + res);
+            }
+                )
+            .catch((error) => {console.error(error);})
+         }
+
         setSent(true); 
     }
 
     const validate = (values) => {
         const errors = required(['orderLocation', 'orderAdult', 'orderChild', 
-                                'startedAt','endedAt', 'orderContent' ], values);     
+                                'startedAt','endedAt', 'orderContent'], values);     
         return errors;
     }; 
 
-    console.log(orders);
+
     return (
         <>
         <AppAppBar />
         <AppForm>
             <>
                 <Typography variant="h4" gutterBottom marked="center" align="center">
-                    여행계획을 작성하세요
+                    {userRole === "seller" ? "제안을 입력해 주세요" : "여행계획을 작성하세요"}
                 </Typography>
             </>
         <Form
@@ -115,7 +143,7 @@ function Order() {
                     <Grid item xs={12} sm={6}>       
                         <Field 
                             component={RFTextField}
-                            disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                            disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                             autoComplete="location"
                             fullWidth
                             label="location"
@@ -139,7 +167,7 @@ function Order() {
                         <Field 
                      
                             component={RFTextField}
-                            disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                            disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                             autoComplete="adult"
                             fullWidth
                             label="성인"
@@ -163,7 +191,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                                disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                                 autoComplete="child"
                                 fullWidth
                                 label="어린이"
@@ -188,7 +216,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                                disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                                 autoComplete="startedAt"
                                 fullWidth
                                 label="출발일(YYYY/MM/DD)"
@@ -203,7 +231,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                                disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                                 autoComplete="endedAt"
                                 fullWidth
                                 label="도착일(YYYY/MM/DD)"
@@ -218,7 +246,7 @@ function Order() {
                         <Field 
                           
                                 component={RFTextField}
-                                disabled={orders?.orderStatus === "pending" || orders === null ? false : true}
+                                disabled={orders?.orderStatus === "delivered" ? true : userRole === "customer" ? false : true }
                                 autoComplete="orderContent"
                                 fullWidth
                                 multiline
@@ -227,10 +255,60 @@ function Order() {
                                 name="orderContent"
                                 required
                                 helperText="내용을 입력하세요" 
-                                defaultValue = {orders?.content ? orders?.content: "-"}
+                                defaultValue = {orders?.content ? orders?.content: ""}
                         >
                         </Field>    
-                    </Grid>                              
+                    </Grid>     
+                    {
+                        userRole === "customer" ? 
+                             "" :
+                             <>   
+                            <Grid item xs={12} sm={12}>
+                                <Field 
+                                    component={RFTextField}
+                                    disabled={true}
+                                    autoComplete="orderId"
+                                    fullWidth
+                                    label="Order No"
+                                    name="orderId"
+                                    defaultValue = {orders?.orderId}
+                                >
+                                </Field>  
+                            </Grid>           
+                             <Grid item xs={12} sm={12}>
+                                <Field 
+                                    component={RFTextField}
+                                    disabled={orders?.orderStatus === "delivered" ? true : false}
+                                    autoComplete="proposalAmount"
+                                    fullWidth
+                                    label="제안금액"
+                                    name="proposalAmount"
+                                    defaultValue = {proposal?.proposalAmount}
+                                    required
+                                >
+                                </Field>    
+                            </Grid>                           
+                             <Grid item xs={12} sm={12}>
+                                <Field
+                                    component={RFTextField}
+                                    disabled={orders?.orderStatus === "delivered" ? true : false}
+                                    autoComplete="proposalContent"
+                                    fullWidth
+                                    multiline
+                                    rows={10}
+                                    label="제안내용"
+                                    name="proposalContent"
+                                    helperText="내용을 입력하세요" 
+                                    defaultValue = {proposal?.proposalContent}
+                                    required
+                                >
+                                </Field>    
+                            </Grid>    
+                             </>
+     
+
+                    } 
+
                 </Grid>
                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker', 'DatePicker']}>
@@ -248,7 +326,7 @@ function Order() {
                     size="large"
                     color="secondary"
                     fullWidth
-                    disabled={orders?.orderStatus === "pending" || orders === null ? false : true}                    
+                    disabled={orders?.orderStatus === "pending" || orders  === null  ? false : true}               
                 >
                     {"등록하기"}
                 </FormButton>

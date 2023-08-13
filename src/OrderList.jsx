@@ -41,7 +41,12 @@ function OrderList(props) {
     const { sx } = props; 
     const email = localStorage.getItem("USER_ID");
 
-    const {status, data: orders, error} = useQuery("orderlist", orderList);
+    const {status, data: orders, error} = useQuery(
+      {
+        queryKey: ["orderList", email],
+        queryFn: () => orderList(email),
+      }
+    );
 
     if (status === "loading") {
         return <span>Loading...</span>;

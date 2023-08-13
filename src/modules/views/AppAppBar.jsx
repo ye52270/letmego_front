@@ -16,9 +16,9 @@ const rightLink = {
 function AppAppBar() {
   const accessToken = localStorage.getItem("ACCESS_TOKEN");
   const USER_NAME = localStorage.getItem("USER_NAME");
-  // console.log("appbar access token : " + accessToken);
-  // console.log("USER_NAME : " + USER_NAME);
-  return (
+  const USER_ROLE = localStorage.getItem("USER_ROLE");
+
+     return (
     <div>
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -27,7 +27,7 @@ function AppAppBar() {
            underline="none"
            color="inherit"
            href="/order-list">
-            {USER_NAME !== "null" ? `${USER_NAME}[Seller] 님 어서오세요` : "" }
+            {USER_NAME !== "null" ? `${USER_NAME} / [${USER_ROLE}]님 어서오세요` : "" }
           </Link>
           <Box sx={{ flex: 1 }} />
           <Link
@@ -40,7 +40,6 @@ function AppAppBar() {
             {'당신과 함께하는 letmego.app'}
           </Link>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-        
             <Link
               color="inherit"
               variant="h6"

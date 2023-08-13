@@ -1,6 +1,4 @@
-import { API_BASE_URL } from "./api-config";
-
-export async function call(api, method, request) {
+export async function call(api, method, request, hosturl) {
 
     const accessToken = localStorage.getItem("ACCESS_TOKEN");
  
@@ -14,11 +12,12 @@ export async function call(api, method, request) {
      
     let options = {
         headers, 
-        url: API_BASE_URL + api,
+        url: hosturl + api,
         method: method
     }; 
 
- 
+    console.log(options.url);
+
     if(request) {
         options.body = JSON.stringify(request);
     } 
@@ -46,7 +45,7 @@ export async function call(api, method, request) {
 
 export async function signup(userDTO){
     console.log(userDTO);
-    return await call("/auth/signup", "POST", userDTO);
+    return await call("/auth/signup", "POST", userDTO, "http://localhost:8080");
 }
 
 export function signout(){
@@ -56,35 +55,50 @@ export function signout(){
     window.location.href = "/";
 }
 
-export async function orderList() {
-    const email = localStorage.getItem("USER_ID");
-    const data =  await call("/order?email=" + email, "GET");
+export async function orderListAll(){
+    const data =  await call("/order", "GET", null, "http://localhost:8081");
+    return data;
+}
+export async function orderList(email) { 
+    const data =  await call("/order?email=" + email, "GET", null, "http://localhost:8081");
+    console.log(data);
     return data;
 }
 
+export async function proposal(proposalDTO){
+    return await call("/seller/proposal", "POST", proposalDTO, 'http://localhost:8084');
+ 
+}
+
 export async function order(orderDTO){
-    return await call("/order/", "POST", orderDTO);
+    return await call("/order/", "POST", orderDTO, 'http://localhost:8081');
 }
 
 export async function orderDetail(orderId = ""){
     if(orderId){
-        return await call("/order/"+orderId);
+        return await call("/order/"+orderId, "GET", null, 'http://localhost:8081');
+    }
+    return null;
+}
+
+export async function proposalDetail(orderId = ""){
+    if(orderId){
+        return await call("/seller/proposal/" + orderId, "GET", null, 'http://localhost:8084');
     }
     return null;
 }
 
 export async function signin(userDTO){
  
-    return await call("/auth/signin", "POST", userDTO)
+    return await call("/auth/signin", "POST", userDTO, 'http://localhost:8080')
                     .then((response) => {
                         if(response.token) {
                             localStorage.setItem("ACCESS_TOKEN", response.token);
                             localStorage.setItem("USER_ROLE", response.userRole);
                             localStorage.setItem("USER_NAME", response.firstName + response.lastName);
                             localStorage.setItem("USER_ID", response.email);
-                            console.log(localStorage);
+                            // console.log(localStorage);
                             window.location.href = "/";
                         }
-
                     })
 }

@@ -9,7 +9,7 @@ import withRoot from './withRoot';
 import Scrollbar from './modules/components/ScrollBar';
 import SeverityPill from './modules/components/SeverityPill';
  
-import { orderList } from './config/ApiService';
+import { orderListAll } from './config/ApiService';
 import { useQuery } from 'react-query';
 import dayjs from 'dayjs';
 import {Link} from '@mui/material';
@@ -38,10 +38,9 @@ import {
 
 
 function OrderListAll(props) {
-    const { sx } = props; 
-    const email = localStorage.getItem("USER_ID");
+    const { sx } = props;  
 
-    const {status, data: orders, error} = useQuery("orderlist", orderList);
+    const {status, data: orders, error} = useQuery("orderListAll", orderListAll);
 
     if (status === "loading") {
         return <span>Loading...</span>;
@@ -77,7 +76,7 @@ function OrderListAll(props) {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                {/* <TableBody>
+                <TableBody>
                   {orders.map((order) => { 
                     return (
                       <TableRow
@@ -87,6 +86,9 @@ function OrderListAll(props) {
                         <TableCell align='center'>
                             {dayjs(order.createDate).format('YYYY-MM-DD')}
                         </TableCell>
+                        <TableCell align='center'>
+                           {order.orderEmail}
+                        </TableCell>                        
                         <TableCell align='center'>
                            {order.orderLocation} 
                         </TableCell>
@@ -106,7 +108,7 @@ function OrderListAll(props) {
                       </TableRow>
                     );
                   })}
-                </TableBody> */}
+                </TableBody>
               </Table>
             </Box>
           </Scrollbar>
