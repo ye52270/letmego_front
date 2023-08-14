@@ -21,12 +21,15 @@ export async function call(api, method, request, hosturl) {
     if(request) {
         options.body = JSON.stringify(request);
     } 
+
     return await fetch(options.url, options)
     .then(
         (response) => {
+            console.log("response : " + response);
             if(response.status === 200) {
                 console.log("status 200 ok");
-                return response.json();
+                    return response.json();
+ 
             }else if(response.status === 400) {
                 alert("login 실패");
                 window.location.href = "/sign-in"
@@ -66,6 +69,7 @@ export async function orderList(email) {
 }
 
 export async function proposal(proposalDTO){
+    console.log("proposal 저장");
     return await call("/seller/proposal", "POST", proposalDTO, 'http://localhost:8084');
  
 }
@@ -83,7 +87,7 @@ export async function orderDetail(orderId = ""){
 
 export async function proposalDetail(orderId = ""){
     if(orderId){
-        return await call("/seller/proposal/" + orderId, "GET", null, 'http://localhost:8084');
+        return await call("/seller/proposal/" + orderId, "GET", null, 'http://localhost:8084'); 
     }
     return null;
 }

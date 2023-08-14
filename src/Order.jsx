@@ -54,13 +54,13 @@ function Order() {
     );
  
 
-    const {status:proposalStatus, data:proposal, error:proposalError} =  useQuery(
+    const {status:proposalStatus, data:poposalData, error:proposalError} =  useQuery(
         {
-            queryKey: ["proposal", orderId],
+            queryKey: ["proposalDetail", orderId],
             queryFn: () => proposalDetail(orderId)
         }
     
-);
+    );
 
 
     if (orderStatus ===  "loading" || proposalStatus ===  "loading") {
@@ -84,6 +84,7 @@ function Order() {
          
         }else if(userRole === "seller") { 
 
+            console.log("values : " + values);
             proposal(values)
             .then((res) => {
                 window.location.href = "/";
@@ -260,7 +261,7 @@ function Order() {
                         </Field>    
                     </Grid>     
                     {
-                        userRole === "customer" ? 
+                        userRole === "customer" || orders?.orderStatus === "pending" ? 
                              "" :
                              <>   
                             <Grid item xs={12} sm={12}>
@@ -283,7 +284,7 @@ function Order() {
                                     fullWidth
                                     label="제안금액"
                                     name="proposalAmount"
-                                    defaultValue = {proposal?.proposalAmount}
+                                    defaultValue = {poposalData?.proposalAmount}
                                     required
                                 >
                                 </Field>    
@@ -299,7 +300,7 @@ function Order() {
                                     label="제안내용"
                                     name="proposalContent"
                                     helperText="내용을 입력하세요" 
-                                    defaultValue = {proposal?.proposalContent}
+                                    defaultValue = {poposalData?.proposalContent}
                                     required
                                 >
                                 </Field>    
