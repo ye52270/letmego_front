@@ -1,0 +1,11 @@
+patchesStrategicMerge:
+- deployment-patch.yaml
+- service-patch.yaml
+resources:
+- ../../base
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: 207797165735.dkr.ecr.ap-northeast-2.amazonaws.com/frontend
+  newName: 207797165735.dkr.ecr.ap-northeast-2.amazonaws.com/frontend
+  newTag: d50f83d02396001558951ab28e2054a5c43400b7
