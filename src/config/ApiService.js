@@ -1,4 +1,5 @@
 export async function call(api, method, request, hosturl) {
+    hosturl = "/";
 
     const accessToken = localStorage.getItem("ACCESS_TOKEN");
  
