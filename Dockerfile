@@ -1,8 +1,11 @@
-FROM nginx:1.25.1-alpine3.17-slim
-RUN rm -rf /etc/nginx/sites-enabled/default
-COPY nginx.conf /etc/nginx/conf.d
-WORKDIR /code
-COPY dist/ dist/
-EXPOSE 80 
-STOPSIGNAL SIGTERM
+FROM nginx
+RUN mkdir /app
+WORKDIR /app
+RUN mkdir ./build
+ADD ./dist ./build
+RUN rm /etc/nginx/conf.d/default.conf
+
+
+COPY ./nginx.conf /etc/nginx/conf.d
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
