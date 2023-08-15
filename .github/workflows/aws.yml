@@ -1,39 +1,88 @@
 name: Build React App
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   build:
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.x ]
+        node-version: [ 18.x ]    
+        sname: [frontend]
+    steps: 
+    - name: Checkout
+      uses: actions/checkout@v1
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}      
 
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Create env file
-        run: |
-          touch .env
-          echo REACT_APP_API_ENDPOINT=${{ secrets.REACT_APP_API_ENDPOINT }} >> .env
-          cat .env
-      - name: Npm Install
-        run: |
-          npm install
-      - name: Npm Build
-        run: |
-          npm run build
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_STAGING_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          SOURCE_DIR: "dist"
+    - name: Npm Install
+      run: |
+        npm install      
+
+    - name: Npm Build
+      run: |
+        npm run build
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region:  ${{ secrets.AWS_DEFAULT_REGION }}
+
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      run: |
+        docker build -t letmego:${{matrix.sname}} -f ${{matrix.sname}}/Dockerfile .
+        docker tag letmego:${{matrix.sname}} 207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/${{matrix.sname}}:${{matrix.sname}}
+        docker push 207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/${{matrix.sname}}:${{matrix.sname}}
+
+
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest      
+#     strategy:
+#       matrix:
+#         node-version: [ 18.x ]
+
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#       - name: Create env file
+#         run: |
+#           touch .env
+#           echo REACT_APP_API_ENDPOINT=${{ secrets.REACT_APP_API_ENDPOINT }} >> .env
+#           cat .env
+#       - name: Npm Install
+#         run: |
+#           npm install
+#       - name: Npm Build
+#         run: |
+#           npm run build
+#       - name: Deploy to S3
+#         uses: jakejarvis/s3-sync-action@master
+#         with:
+#           args: --acl public-read --delete
+#         env:
+#           AWS_S3_BUCKET: ${{ secrets.AWS_STAGING_BUCKET_NAME }}
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+#           SOURCE_DIR: "dist"
