@@ -69,7 +69,7 @@ jobs:
 
       - name: Update Kubernetes resources
         run: | 
-          cd ./kustomize/overlays/prod
+          cd kustomize/overlays/prod
           echo \207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/\${{matrix.sname}}
           echo \207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com:\${{ github.sha }}
           kustomize edit set image \207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/\${{matrix.sname}}=\207797165735.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/\${{matrix.sname}}:\${{ github.sha }}
