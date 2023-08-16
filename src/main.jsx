@@ -17,10 +17,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
   {
-    path: "/letmego",
-    element: <Home />,
-  },
-  {
     path: "/sign-in",
     element: <Signin />,
   },
