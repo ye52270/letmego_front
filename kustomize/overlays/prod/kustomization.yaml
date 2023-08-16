@@ -8,4 +8,4 @@ kind: Kustomization
 images:
 - name: 207797165735.dkr.ecr.ap-northeast-2.amazonaws.com/frontend
   newName: 207797165735.dkr.ecr.ap-northeast-2.amazonaws.com/frontend
-  newTag: 04a543d29f0bf300d612dee700bb8ee1535921ca
+  newTag: 921a3e68fd20e82432b7d8dca9838b96fa435782
