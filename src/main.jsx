@@ -33,11 +33,11 @@ const router = createBrowserRouter([
     element: <SignOut />,
   },  
   {
-    path: "/order/:orderId",
+    path: "/myorder/:orderId",
     element: <Order />, 
   },
   {
-    path: "/createorder/",
+    path: "/myorder/",
     element: <Order />, 
   },
   {

@@ -95,7 +95,7 @@ function OrderList(props) {
                         <TableCell align='center'>
                             <Link
                             underline="none"
-                            href={"/order/" + order.orderId}
+                            href={"/myorder/" + order.orderId}
                             >
                                 {order.startedAt} ~ {order.endedAt}
                             </Link>                           

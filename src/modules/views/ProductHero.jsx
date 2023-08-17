@@ -37,7 +37,7 @@ export default function ProductHero() {
         variant="contained"
         size="large"
         component="a"
-        href="/createorder"
+        href="/myorder"
         sx={{ minWidth: 200 }}
       >
         Register
