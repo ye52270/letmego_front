@@ -94,7 +94,7 @@ export async function proposalDetail(orderId = ""){
 
 export async function signin(userDTO){
  
-    return await call("/auth/signin", "POST", userDTO, 'http://k8s-eksdemogroup-e0353f9ab7-1495851506.ap-northeast-2.elb.amazonaws.com/member')
+    return await call("/auth/signin", "POST", userDTO, 'http://k8s-eksdemogroup-e0353f9ab7-1495851506.ap-northeast-2.elb.amazonaws.com')
                     .then((response) => {
                         if(response.token) {
                             localStorage.setItem("ACCESS_TOKEN", response.token);
