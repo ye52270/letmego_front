@@ -48,7 +48,7 @@ export async function call(api, method, request, hosturl) {
 
 export async function signup(userDTO){
     console.log(userDTO);
-    return await call("/auth/signup", "POST", userDTO, "http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com/");
+    return await call("/auth/signup", "POST", userDTO, "http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com");
 }
 
 export function signout(){
