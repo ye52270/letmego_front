@@ -59,11 +59,11 @@ export function signout(){
 }
 
 export async function orderListAll(){
-    const data =  await call("/order", "GET", null, "http://localhost:8081");
+    const data =  await call("/order", "GET", null, "http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com");
     return data;
 }
 export async function orderList(email) { 
-    const data =  await call("/order?email=" + email, "GET", null, "http://localhost:8081");
+    const data =  await call("/order?email=" + email, "GET", null, "http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com");
     console.log(data);
     return data;
 }
@@ -75,12 +75,12 @@ export async function proposal(proposalDTO){
 }
 
 export async function order(orderDTO){
-    return await call("/order/", "POST", orderDTO, 'http://localhost:8081');
+    return await call("/order/", "POST", orderDTO, 'http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com');
 }
 
 export async function orderDetail(orderId = ""){
     if(orderId){
-        return await call("/order/"+orderId, "GET", null, 'http://localhost:8081');
+        return await call("/order/"+orderId, "GET", null, 'http://k8s-eksingressgroup-798a355eae-1868259487.ap-northeast-2.elb.amazonaws.com');
     }
     return null;
 }
