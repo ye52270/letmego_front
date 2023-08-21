@@ -261,7 +261,7 @@ function Order() {
                         </Field>    
                     </Grid>     
                     {
-                        userRole === "customer" || orders?.orderStatus === "pending" ? 
+                        userRole === "customer" && orders?.orderStatus === "pending" ? 
                              "" :
                              <>   
                             <Grid item xs={12} sm={12}>
